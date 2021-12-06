@@ -1,0 +1,16 @@
+html, body {
+  margin: 0;
+  background: black;
+}
+
+h1 {
+  font-family: sans-serif;
+  text-align: center;
+  line-height: 100vh;
+  color: #999;
+  margin: 0;
+}
+
+h1 span {
+  color: white;
+}
