@@ -1,73 +1,88 @@
-# Lab1: Creating containers
-
-## Lab scenario
-
-your team is building a new website, it was decided to use Nginx as a web server, and you were tasked to deploy it using docker.
+# Lab 1: Creating containers
 
 ## Objectives
 
-In this lab, you'll:
+In this lab, you'll learn how to:
 
-- Task 1: Create the nginx container
-- Task 2: Verify the container is running
-- Task 3: Verify that nginx in the container is running
-- Task 4: Delete the container
+- Install docker
+- Verify docker installation
+- Create your first container
 
 ## Instructions
 
-### Task 1: Create the nginx container
+### Install docker
 
-To create the nginx container, open your terminal and run the following command
+Several ways are available to install docker
+- Using docker repository
+- Using installation package
+- Using convenience script (the simplest)
 
-```sh
-docker run -d --name web-server nginx
-```
-
-The `-d` flag will silently create the container and return its id
-
-The `--name` flag will assign the specified value as a name for the container
-
-Docker will first download requires resources and then will create the container
-
-### Task 2: Verify the container is running
-
-To list all running containers, run this command in your terminal
+in your Terminal, run
 
 ```sh
-docker ps
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh ./get-docker.sh
 ```
 
-A table should return a list of active containers, expect to see web-server among them with the status Up.
-
-**Note:** *if the container is not running, use `docker ps -a` to list both running and stopped containers.*
-
-### Task 3: Verify nginx in the container is running
-
-The nginx container will have its own private IP address, we can use it to see if nginx is running
-
-First, find the private IP by inspecting the container
+Once docker is installed, non-root users won't be able to use it without `sudo` command, to run Docker without root privileges create a group, add your user, then logout and login again
 
 ```sh
-docker inspect web-server
+sudo groupadd docker
+sudo usermod -aG docker $USER
 ```
 
-By inspecting the container, a JSON will be returned containing details about the container such as its name, creation date, status, network settings, etc.
+Logout and login after running these commands
 
-One of JSON keys should be `IPAddress`, it represents the private IP of the container.
+### Verify docker installation
 
-Using your browser, or a tool like curl, access the container by the retrieved IP address
+It's possible to verify docker installation by checking the installed docker version
 
 ```sh
-curl 172.17.0.2
+docker version
 ```
 
-### Task 4: Delete the container
+The expected output of the command should be 
 
-To delete the container, run in your terminal
+```
+Client: Docker Engine - Community
+ Version:           20.10.11
+ API version:       1.41
+ Go version:        go1.16.9
+ Git commit:        dea9396
+ Built:             Thu Nov 18 00:37:06 2021
+ OS/Arch:           linux/amd64
+ Context:           default
+ Experimental:      true
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          20.10.11
+  API version:      1.41 (minimum version 1.12)
+  Go version:       go1.16.9
+  Git commit:       847da18
+  Built:            Thu Nov 18 00:35:15 2021
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.4.12
+  GitCommit:        7b11cfaabd73bb80907dd23182b9347b4245eb5d
+ runc:
+  Version:          1.0.2
+  GitCommit:        v1.0.2-0-g52b36a2
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+```
+
+### Create your first container
+
+To get started using docker, create a hello-world container
 
 ```sh
-docker rm web-server
+docker run hello-world
 ```
+
+Docker will create the container and will print an explanation of how it works.
 
 ---
 Go to [Lab 2](./lab2.md)

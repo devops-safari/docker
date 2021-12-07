@@ -1,57 +1,83 @@
-# Lab3: Creating non-ephemeral containers
-
-## Lab scenario
-
-After building a static website, your team decided to build a blog using WordPress, you were tasked to deploy it using Docker.
+# Lab 3: Image lifecycle
 
 ## Objectives
 
-In this lab, you'll:
+In this lab, you'll learn about:
 
-- Task 1: Creating MySQL container
-- Task 2: Creating WordPress container
+- Public and private registies
+- Managing images
 
 ## Instructions
 
-### Task 1: Creating MySQL container
+### Use public and private registies
 
-As WordPress requires a database, a MySQL container must be created.
+Docker hub is a library of container images, we call it also a registry, since pulling images doesn't require an account, it's a Public registry
 
-```sh
-docker run \
-  -d \
-  --name blog-db
-  -e MYSQL_ROOT_PASSWORD=gHXp8Hqr \
-  -e MYSQL_DATABASE=wp \
-  -v ./db-data:/var/lib/mysql \
-  mysql:5.7
-```
+Many companies use private images, so they host them in private registries.
 
-MySQL container requires a password to be specified for root user through `MYSQL_ROOT_PASSWORD` environment variable
-
-Also creating an empty database is required by WordPress using `MYSQL_ROOT_PASSWORD` variable
-
-The `-e` flag is used to passing values to environment variables
-
-Since containers are by default ephemeral, it's important to persist database data by mounting a volume using the `-v` flag
-
-### Task 2: Creating WordPress container
-
-WordPress container should also be stateful in order to maintain blog data (like images)
-
-It's also important to pass database connection details (hostname, user, password and database name)
+To connect to Docker Hub registry use `login` command
 
 ```sh
-docker run \
-  -d \
-  --name blog-wp \
-  -e WORDPRESS_DB_HOST=blog-db \
-  -e WORDPRESS_DB_USER=root \
-  -e WORDPRESS_DB_PASSWORD=gHXp8Hqr \
-  -e WORDPRESS_DB_NAME=wp \
-  -v ./wp-data:/var/www/html
-  -p 80:80
-  wordpress
+docker login
 ```
 
-The `-p` flag is used to expose a port from the container to the host machine, on left the host machine port to be exposed, on the right the listening port in the container
+When connecting to a private registry, specify the URL
+
+```sh
+docker login registry.company.com
+```
+
+The `login` command will interactively ask for a username and password
+
+Username and password can also be passed in login command using `-u` and `-p` flags
+
+```sh
+docker login -u [username] -p [password]
+```
+
+### Managing images
+
+Images can be pulled from a registry, and also can be hosted in a registry
+
+To pull an image use the `pull` command
+
+```sh
+docker pull mysql:5.7
+```
+
+The image name is `mysql`, the leading `5.7` is called a tag, with it we specify the desired version of MySQL image to pull
+
+To view the list of pulled images use `images` command, it will display a list of images with their repository name, tag, ID, creation date, and size
+
+```sh
+docker images
+```
+
+When a tag is not specified when pulling an image, docker will pull the `latest` tag, that usually represents the latest version of the image.
+
+Images can be deleted using `rmi` command, but must not be used by containers
+
+```sh
+docker rmi busybox
+```
+
+Images can be renamed using `tag` command
+
+```sh
+docker tag nginx web-server
+docker images
+```
+
+A new image with name `web-server` will be created, will share the same ID of `nginx` image
+
+When hosting an image in Docker Hub registry, its name start with the user account, and will be hosted using `push` command
+
+A repository in Docker Hub website must be created before pushing the image
+
+```sh
+docker tag nginx [username]/nginx
+docker push [username]/nginx
+```
+
+---
+Go to [Lab 4](./lab4.md)
