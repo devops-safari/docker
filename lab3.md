@@ -4,12 +4,12 @@
 
 In this lab, you'll learn about:
 
-- Public and private registies
+- Public and private registries
 - Managing images
 
 ## Instructions
 
-### Use public and private registies
+### Use public and private registries
 
 Docker hub is a library of container images, we call it also a registry, since pulling images doesn't require an account, it's a Public registry
 
@@ -80,4 +80,5 @@ docker push [username]/nginx
 ```
 
 ---
+
 Go to [Lab 4](./lab4.md)
